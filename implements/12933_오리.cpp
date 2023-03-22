@@ -4,40 +4,58 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
 #include <algorithm>
-
+#include <deque>
+#include <utility>
 using namespace std;
 
 string str;
-string target = "quack";
-int ret;
+deque<int> deq;
+int check[2504], duck;
+int sound[] = {'q', 'u', 'a', 'c', 'k'};
 
-bool getCount(){
-    vector<int> duck_v;
-    int start, end, idx =0;
-    while(idx < str.size()) {
-        start = find(target.begin(), target.end(), str[idx]) - target.begin();
-        end = s;
-        while(idx < str.size() && end < target.size() && str[idx] == target[end]){
-            idx++;
-            end++;
-        }
-        if(s==0){
-            duck_v.push_back(end);
-            ret = max(ret, (int) duck_v.size());
-            if(e - s == target.size()) duck_v.pop_back();
-            continue;
-        }
+void go(int quack, int idx, int c) {
+    if(idx >= str.size()) {
+        return;
     }
-}
 
+    if(str[idx] == sound[quack] and check[idx] == 0) {
+        deq.push_back(idx);
+        if(sound[quack] == 'k'){
+            if(c == 0) {
+                duck = duck + 1;
+                c = 1;
+            }
+            while(!deq.empty()) {
+                check[deq.front()] = 1;
+                deq.pop_front();
+            }
+        }
+        if(quack == 4) quack = 0;
+        else quack = quack + 1;
+    }
+    go(quack, idx+1, c);
+}
 
 int main() {
     cin >> str;
-    if(getCount()){
-        cout << ret << '\n';
-    }else{
-        cout << -1 << '\n';
+
+    for(int i=0; i<str.size(); i++){
+        if(str[i] == 'q' and check[i] !=1) {
+            go(0,i,0);
+        }
     }
+
+    for(int i=0; i<str.size(); i++){
+        if(check[i] == 0) {
+            cout << -1 << '\n';
+            return 0;
+        }
+    }
+    if(duck == 0 or str.size() % 5 !=0) {
+        cout << -1 << '\n';
+        return 0;
+    }
+    cout << duck << '\n';
+
 }
