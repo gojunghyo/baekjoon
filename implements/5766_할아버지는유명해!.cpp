@@ -19,15 +19,14 @@ int main() {
         int fiMax = -1e9;
         int seMax = -1e9;
         mp.clear();
-        for(int i=0; i<n; i++){
-            for(int j=0; j<m; j++){
+
+        for(int i=0; i<n * m; i++){
                 int value;
                 cin >> value;
                 mp.insert({value, mp[value]++});
                 if(fiMax < mp[value]) {
                     fiMax = mp[value];
                 }
-            }
         }
 
         for(auto i : mp){
